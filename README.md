@@ -30,6 +30,7 @@ This project implements a web-based, machine learning–driven decision support 
 * **Data Preprocessing**: Cleaning, handling missing values, and normalization.
 * **Exploratory Data Analysis (EDA)**: Visualizing trends and correlations.
 * **Supervised Learning**:
+    * Linear Regression 
     * Logistic Regression
     * Decision Tree
     * Random Forest
