@@ -1,11 +1,49 @@
-from fastapi import FastAPI, UploadFile, File
+
+# --- Imports ---
+from fastapi import FastAPI, UploadFile, File, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 import pandas as pd
 import ml_models
 import os
-from fastapi.middleware.cors import CORSMiddleware
+from models import Student, SessionLocal
 
 app = FastAPI()
+
+# Dependency to get DB session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+class SaveStudentRequest(BaseModel):
+    studytime: float
+    absences: float
+    G1: float
+    G2: float
+    failures: float
+    risk_level: str
+    predicted_grade: float
+
+# Save student record endpoint
+@app.post("/save_student")
+def save_student(input: SaveStudentRequest, db: Session = Depends(get_db)):
+    student = Student(
+        studytime=input.studytime,
+        absences=input.absences,
+        G1=input.G1,
+        G2=input.G2,
+        failures=input.failures,
+        risk_level=input.risk_level,
+        predicted_grade=input.predicted_grade
+    )
+    db.add(student)
+    db.commit()
+    db.refresh(student)
+    return {"status": "success", "student_id": student.id}
 
 # Enable CORS
 app.add_middleware(

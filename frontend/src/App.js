@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { trainModels, predictRisk, predictGrade } from "./api";
+import { trainModels, predictRisk, predictGrade, saveStudent } from "./api";
 import Dashboard from "./components/Dashboard";
 import ModelSelector from "./components/ModelSelector";
 import ResultsTable from "./components/ResultsTable";
@@ -19,6 +19,23 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [trainSuccess, setTrainSuccess] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const handleSaveStudent = async () => {
+    setLoading(true);
+    setError(null);
+    setSaveSuccess(false);
+    try {
+      await saveStudent({
+        ...input,
+        risk_level: riskResult,
+        predicted_grade: gradeResult,
+      });
+      setSaveSuccess(true);
+    } catch (err) {
+      setError("Save failed.");
+    }
+    setLoading(false);
+  };
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -109,6 +126,12 @@ function App() {
         <button onClick={handlePredictGrade} disabled={loading}>
           Predict Grade
         </button>
+        <button
+          onClick={handleSaveStudent}
+          disabled={loading || !riskResult || !gradeResult}
+        >
+          Save Student Record
+        </button>
       </div>
       {riskResult && (
         <div>
@@ -119,6 +142,9 @@ function App() {
         <div>
           <strong>Predicted Grade:</strong> {gradeResult}
         </div>
+      )}
+      {saveSuccess && (
+        <div style={{ color: "green" }}>Student record saved!</div>
       )}
       {error && <div style={{ color: "red" }}>{error}</div>}
       <ResultsTable riskResult={riskResult} gradeResult={gradeResult} />

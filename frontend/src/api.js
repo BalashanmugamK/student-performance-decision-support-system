@@ -6,6 +6,10 @@ export const trainModels = async () => {
   return axios.post(`${API_BASE}/train`);
 };
 
+export const saveStudent = async (data) => {
+  return axios.post(`${API_BASE}/save_student`, data);
+};
+
 export const predictRisk = async (data) => {
   return axios.post(`${API_BASE}/predict-risk`, data);
 };
