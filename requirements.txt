@@ -8,3 +8,6 @@ sqlalchemy
 mysql-connector-python
 flask
 textblob
+uvicorn
+fastapi
+
