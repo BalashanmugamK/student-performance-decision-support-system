@@ -1,41 +1,70 @@
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, confusion_matrix
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
+import os
+import joblib
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
 
-def ml_visuals(df):
-    X = df[["studytime","absences","G1","G2","failures"]]
-    y = pd.qcut(df["G3"], q=3, labels=["High","Medium","Low"])
+# -------------------- Paths --------------------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, "..", "models")
+os.makedirs(MODEL_DIR, exist_ok=True)
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.3, random_state=42
-    )
+RISK_MODEL_PATH = os.path.join(MODEL_DIR, "risk_model.pkl")
+GRADE_MODEL_PATH = os.path.join(MODEL_DIR, "grade_model.pkl")
+FEATURES_PATH = os.path.join(MODEL_DIR, "features.pkl")
 
-    models = {
-        "Logistic Regression": LogisticRegression(max_iter=1000),
-        "Decision Tree": DecisionTreeClassifier(),
-        "Random Forest": RandomForestClassifier()
-    }
+# -------------------- Training --------------------
+def train_models(df):
+    
+    features = ["studytime", "absences", "G1", "G2", "failures"]
+    target = "G3"
 
-    accuracy = {}
-    rf_confusion = None
-    rf_importance = None
+    # Safety check
+    for col in features + [target]:
+        if col not in df.columns:
+            raise ValueError(f"Required column '{col}' not found in dataset")
 
-    for name, model in models.items():
-        model.fit(X_train, y_train)
-        preds = model.predict(X_test)
-        accuracy[name] = round(accuracy_score(y_test, preds), 3)
+    X = df[features]
+    y = df[target]
 
-        if name == "Random Forest":
-            rf_confusion = confusion_matrix(y_test, preds).tolist()
-            rf_importance = dict(
-                zip(X.columns, model.feature_importances_.round(3))
-            )
+    # Risk labels
+    y_risk = pd.qcut(y, q=3, labels=["High Risk", "Medium Risk", "Low Risk"])
 
-    return {
-        "accuracy": accuracy,
-        "confusion_matrix": rf_confusion,
-        "feature_importance": rf_importance
-    }
+    risk_model = Pipeline([
+        ("scaler", StandardScaler()),
+        ("model", RandomForestClassifier(random_state=42))
+    ])
+
+    grade_model = Pipeline([
+        ("scaler", StandardScaler()),
+        ("model", LinearRegression())
+    ])
+
+    risk_model.fit(X, y_risk)
+    grade_model.fit(X, y)
+
+    joblib.dump(risk_model, RISK_MODEL_PATH)
+    joblib.dump(grade_model, GRADE_MODEL_PATH)
+    joblib.dump(features, FEATURES_PATH)
+
+
+# -------------------- Prediction --------------------
+def predict_risk(data):
+    model = joblib.load(RISK_MODEL_PATH)
+    features = joblib.load(FEATURES_PATH)
+
+    X = pd.DataFrame([data])
+    X = X[features]
+
+    return model.predict(X)[0]
+
+def predict_grade(data):
+    model = joblib.load(GRADE_MODEL_PATH)
+    features = joblib.load(FEATURES_PATH)
+
+    X = pd.DataFrame([data])
+    X = X[features]
+
+    return round(float(model.predict(X)[0]), 2)
