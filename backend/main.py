@@ -7,6 +7,8 @@ from services.eda import eda_summary
 from services.ml_models import train_models, predict_risk, predict_grade
 from services.clustering import cluster_students, pca_analysis
 from services.text_analytics import sentiment_analysis, topic_modeling
+from services.ml_models import class_grade_stats
+from services.ml_models import predict_grade_all, predict_risk_all
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -101,3 +103,23 @@ def topics():
     if feedback_df is None:
         return {"error": "Feedback dataset not uploaded"}
     return topic_modeling(feedback_df)
+
+@app.get("/grade-stats")
+def grade_stats():
+    if student_df is None:
+        raise HTTPException(status_code=400, detail="Student dataset not uploaded")
+
+    return class_grade_stats(student_df)
+@app.get("/predict-grade-all")
+def predict_grade_all_api():
+    if student_df is None:
+        raise HTTPException(status_code=400, detail="Student dataset not uploaded")
+    return predict_grade_all(student_df)
+
+
+@app.get("/predict-risk-all")
+def predict_risk_all_api():
+    if student_df is None:
+        raise HTTPException(status_code=400, detail="Student dataset not uploaded")
+    return predict_risk_all(student_df)
+
