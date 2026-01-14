@@ -1,0 +1,100 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.app-container {
+  min-height: 100vh;
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.65),
+      rgba(0, 0, 0, 0.65)
+    ),
+    url("../public/bg.jpg") center/cover no-repeat;
+  color: #fff;
+}
+
+
+.navbar {
+  display: flex;
+  gap: 30px;
+  padding: 15px 40px;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.navbar a {
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  color: #00ffd5;
+}
+
+.section {
+  background: rgba(0, 0, 0, 0.7);
+  margin: 30px;
+  padding: 25px;
+  border-radius: 8px;
+}
+
+input,
+select {
+  padding: 8px;
+  margin: 5px;
+}
+
+button {
+  padding: 8px 14px;
+  margin: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #00ffd5;
+}
+
+.severity-box {
+  background: rgba(0, 0, 0, 0.85);
+  border-left: 6px solid #ff9800;
+  padding: 18px 22px;
+  margin-top: 20px;
+  color: #f5f5f5;
+  font-size: 14px;
+  line-height: 1.6;
+  border-radius: 8px;
+}
+
+/* force-remove any white background from children */
+.severity-box * {
+  background: transparent !important;
+}
+
+.severity-box h4 {
+  margin: 0 0 10px 0;
+  color: #ffd180;
+  font-size: 16px;
+}
+
+.severity-box p {
+  margin: 6px 0;
+}
+
+.severity-box ul {
+  margin: 8px 0 0 18px;
+}
+
+.severity-box li {
+  margin-bottom: 4px;
+}
+
+/* highlighted formula block (NO white strip) */
+.severity-formula {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-left: 4px solid #00ffd5;
+  padding: 10px 14px;
+  margin: 10px 0;
+  font-family: "Courier New", monospace;
+  color: #00ffd5;
+  border-radius: 6px;
+}

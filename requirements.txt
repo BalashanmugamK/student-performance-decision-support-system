@@ -1,0 +1,13 @@
+numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+nltk
+sqlalchemy
+mysql-connector-python
+flask
+textblob
+uvicorn
+fastapi
+
