@@ -15,7 +15,13 @@ from services.eda import eda_summary
 
 from fastapi.middleware.cors import CORSMiddleware
 
+
 app = FastAPI()
+
+# Root endpoint for health check or welcome message
+@app.get("/")
+def read_root():
+    return {"message": "Backend is running!"}
 
 # -------------------- CORS --------------------
 app.add_middleware(
