@@ -20,10 +20,7 @@ function StudentSummary({ dataVersion }) {
 
   // 🔍 SEARCH FILTER
   let filtered = students.filter((s) =>
-    Object.values(s)
-      .join(" ")
-      .toLowerCase()
-      .includes(query.toLowerCase())
+    Object.values(s).join(" ").toLowerCase().includes(query.toLowerCase()),
   );
 
   // 🔢 MULTI-COLUMN SORT (Excel-style)
@@ -57,7 +54,7 @@ function StudentSummary({ dataVersion }) {
         return prev.map((s) =>
           s.key === key
             ? { ...s, direction: s.direction === "asc" ? "desc" : "asc" }
-            : s
+            : s,
         );
       }
 
@@ -97,63 +94,63 @@ function StudentSummary({ dataVersion }) {
         Clear Sorting
       </button>
 
-      <table border="1" width="100%">
-        <thead>
-          <tr>
-            <th onClick={() => requestSort("student_id")}>
-              ID{sortIndicator("student_id")}
-            </th>
-            <th onClick={() => requestSort("name")}>
-              Name{sortIndicator("name")}
-            </th>
-            <th onClick={() => requestSort("actual_G1")}>
-              G1{sortIndicator("actual_G1")}
-            </th>
-            <th onClick={() => requestSort("actual_G2")}>
-              G2{sortIndicator("actual_G2")}
-            </th>
-            <th onClick={() => requestSort("current_average")}>
-              Current Avg{sortIndicator("current_average")}
-            </th>
-            <th onClick={() => requestSort("predicted_grade")}>
-              Predicted Grade{sortIndicator("predicted_grade")}
-            </th>
-            <th onClick={() => requestSort("risk_level")}>
-              Risk{sortIndicator("risk_level")}
-            </th>
-            <th onClick={() => requestSort("severity")}>
-              Severity{sortIndicator("severity")}
-            </th>
-            <th onClick={() => requestSort("group")}>
-              Group{sortIndicator("group")}
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {filtered.map((s) => (
-            <tr key={s.student_id}>
-              <td>{s.student_id}</td>
-              <td>{s.name}</td>
-              <td>{s.actual_G1}</td>
-              <td>{s.actual_G2}</td>
-              <td>{s.current_average.toFixed(2)}</td>
-
-              <td>
-                {s.predicted_grade.toFixed(2)}
-              </td>
-
-              <td>{s.risk_level}</td>
-
-              <td style={severityStyle(s.severity)}>
-                {s.severity.toFixed(2)}
-              </td>
-
-              <td>{s.group}</td>
+      <div className="table-responsive">
+        <table border="1" width="100%">
+          <thead>
+            <tr>
+              <th onClick={() => requestSort("student_id")}>
+                ID{sortIndicator("student_id")}
+              </th>
+              <th onClick={() => requestSort("name")}>
+                Name{sortIndicator("name")}
+              </th>
+              <th onClick={() => requestSort("actual_G1")}>
+                G1{sortIndicator("actual_G1")}
+              </th>
+              <th onClick={() => requestSort("actual_G2")}>
+                G2{sortIndicator("actual_G2")}
+              </th>
+              <th onClick={() => requestSort("current_average")}>
+                Current Avg{sortIndicator("current_average")}
+              </th>
+              <th onClick={() => requestSort("predicted_grade")}>
+                Predicted Grade{sortIndicator("predicted_grade")}
+              </th>
+              <th onClick={() => requestSort("risk_level")}>
+                Risk{sortIndicator("risk_level")}
+              </th>
+              <th onClick={() => requestSort("severity")}>
+                Severity{sortIndicator("severity")}
+              </th>
+              <th onClick={() => requestSort("group")}>
+                Group{sortIndicator("group")}
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {filtered.map((s) => (
+              <tr key={s.student_id}>
+                <td>{s.student_id}</td>
+                <td>{s.name}</td>
+                <td>{s.actual_G1}</td>
+                <td>{s.actual_G2}</td>
+                <td>{s.current_average.toFixed(2)}</td>
+
+                <td>{s.predicted_grade.toFixed(2)}</td>
+
+                <td>{s.risk_level}</td>
+
+                <td style={severityStyle(s.severity)}>
+                  {s.severity.toFixed(2)}
+                </td>
+
+                <td>{s.group}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* 📘 SEVERITY EXPLANATION */}
       <div className="severity-box">

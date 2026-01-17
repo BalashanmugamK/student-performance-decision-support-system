@@ -14,14 +14,10 @@ function FeedbackSentimentChart({ dataVersion }) {
           datasets: [
             {
               label: "Feedback Count",
-              data: [
-                res.data.Positive,
-                res.data.Neutral,
-                res.data.Negative
-              ],
-              backgroundColor: ["green", "gray", "red"]
-            }
-          ]
+              data: [res.data.Positive, res.data.Neutral, res.data.Negative],
+              backgroundColor: ["green", "gray", "red"],
+            },
+          ],
         });
       })
       .catch(() => setData(null));
@@ -29,10 +25,27 @@ function FeedbackSentimentChart({ dataVersion }) {
 
   if (!data) return null;
 
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: { display: false },
+    },
+    scales: {
+      y: { beginAtZero: true },
+    },
+  };
+
   return (
-    <div className="section">
+    <div
+      className="section"
+      style={{ minHeight: 320, maxWidth: 600, margin: "0 auto" }}
+    >
       <h2>Feedback Sentiment</h2>
-      <Bar data={data} />
+      <div style={{ height: 260 }}>
+        <Bar data={data} options={options} />
+      </div>
     </div>
   );
 }

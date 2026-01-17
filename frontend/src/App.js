@@ -7,7 +7,6 @@ import RiskOverview from "./components/RiskOverview";
 import Recommendations from "./components/Recommendations";
 import PredictedGradeChart from "./components/PredictedGradeChart";
 
-
 // Visualizations (CLIENT-FRIENDLY)
 import RiskChart from "./components/RiskChart";
 import ClassCards from "./components/ClassCards";
@@ -50,29 +49,32 @@ function App() {
         onReset={onReset}
       />
 
-      {/* ================= STUDENT ANALYTICS ================= */}
-      {hasStudentData ? (
-        <>
-          <StudentSummary dataVersion={dataVersion} />
-          <PredictedGradeChart dataVersion={dataVersion} />
-          <RiskOverview dataVersion={dataVersion} />
-          <RiskChart dataVersion={dataVersion} />
-          <ClassCards dataVersion={dataVersion} />
-          <Recommendations dataVersion={dataVersion} />
-        </>
-      ) : (
-        <p>Please upload a student dataset to view performance analytics.</p>
-      )}
+      {/* ================= OUTPUT FRAME ================= */}
+      <div className="output-frame">
+        {/* ================= STUDENT ANALYTICS ================= */}
+        {hasStudentData ? (
+          <div className="analytics-grid">
+            <StudentSummary dataVersion={dataVersion} />
+            <PredictedGradeChart dataVersion={dataVersion} />
+            <RiskOverview dataVersion={dataVersion} />
+            <RiskChart dataVersion={dataVersion} />
+            <ClassCards dataVersion={dataVersion} />
+            <Recommendations dataVersion={dataVersion} />
+          </div>
+        ) : (
+          <p>Please upload a student dataset to view performance analytics.</p>
+        )}
 
-      {/* ================= FEEDBACK ANALYTICS ================= */}
-      {hasFeedbackData ? (
-        <>
-          <FeedbackAnalytics dataVersion={dataVersion} />
-          <FeedbackSentimentChart dataVersion={dataVersion} />
-        </>
-      ) : (
-        <p>Please upload a feedback dataset to view feedback analytics.</p>
-      )}
+        {/* ================= FEEDBACK ANALYTICS ================= */}
+        {hasFeedbackData ? (
+          <div className="analytics-grid">
+            <FeedbackAnalytics dataVersion={dataVersion} />
+            <FeedbackSentimentChart dataVersion={dataVersion} />
+          </div>
+        ) : (
+          <p>Please upload a feedback dataset to view feedback analytics.</p>
+        )}
+      </div>
     </div>
   );
 }

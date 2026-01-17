@@ -17,11 +17,11 @@ function RiskChart({ dataVersion }) {
               data: [
                 res.data["High Risk"],
                 res.data["Medium Risk"],
-                res.data["Low Risk"]
+                res.data["Low Risk"],
               ],
-              backgroundColor: ["red", "orange", "green"]
-            }
-          ]
+              backgroundColor: ["red", "orange", "green"],
+            },
+          ],
         });
       })
       .catch(() => setChartData(null));
@@ -29,10 +29,27 @@ function RiskChart({ dataVersion }) {
 
   if (!chartData) return null;
 
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: { display: false },
+    },
+    scales: {
+      y: { beginAtZero: true },
+    },
+  };
+
   return (
-    <div className="section">
+    <div
+      className="section"
+      style={{ minHeight: 320, maxWidth: 600, margin: "0 auto" }}
+    >
       <h2>Risk Distribution</h2>
-      <Bar data={chartData} />
+      <div style={{ height: 260 }}>
+        <Bar data={chartData} options={options} />
+      </div>
     </div>
   );
 }
