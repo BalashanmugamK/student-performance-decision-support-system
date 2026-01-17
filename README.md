@@ -81,6 +81,3 @@ student-performance-decision-support-system/
 The system provides interpretable insights such as risk categorization, student clusters, dominant performance factors, and sentiment trends in feedback data. These insights support informed academic intervention and decision-making.
 
 ---
-
-## 📚 Academic Context
-This project was developed as part of the **BCSE206L: Foundations of Data Science** and **BCSE203E: Web Programming** courses.
